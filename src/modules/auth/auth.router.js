@@ -3,7 +3,9 @@ const router=Router();
 import * as authController from './auth.controller.js';
 
 
-router.post('/',authController.Register) 
+router.post('/register',authController.Register) 
+router.post('/login',authController.Login) 
+
 
 
 
