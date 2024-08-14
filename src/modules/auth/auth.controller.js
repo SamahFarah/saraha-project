@@ -7,7 +7,7 @@ export const Register = async (req,res)=>{
 
     try{
         
-        const {userName,email,password,cpassword,gender}=req.body;
+        const {userName,email,password,cpassword,gender,age}=req.body;
         const user= await userModel.findOne({email});
     if(user){
         return res.status(409).json({message:"email exist"})
@@ -15,7 +15,7 @@ export const Register = async (req,res)=>{
         
     const passwordHashed= await bcrypt.hash(password,parseInt(process.env.SALTROUND))
        
-       await userModel.create({userName,email,password:passwordHashed,cpassword,gender});
+       await userModel.create({userName,email,password:passwordHashed,cpassword,gender,age});
    
         return res.status(201).json({message:"success"})
         }catch(err){
