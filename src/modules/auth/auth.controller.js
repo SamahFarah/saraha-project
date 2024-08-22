@@ -53,4 +53,13 @@ export const Register = async (req,res)=>{
         );
         return res.status(200).json({message:"success",token})
     }
+
+    export const allUsers= async(req,res)=>{
+        try{
+            const users = await userModel.find().select('userName');
+            return res.status(200).json({message:"success",users});
+        }catch(error){
+            return res.status(500).json({message:"catch error",error:error.stack});
+        }
+    }
     
