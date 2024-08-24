@@ -2,16 +2,19 @@ import userModel from "../../../DB/models/user.model.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from "../../Utils/sendEmail.js";
+import { AppError } from "../../../AppError.js";
 
 
-export const Register = async (req,res)=>{
+export const Register = async (req,res,next)=>{
 
-    try{
+    
         
         const {userName,email,password,cpassword,gender,age}=req.body;
         const user= await userModel.findOne({email});
     if(user){
-        return res.status(409).json({message:"email exist"})
+        //return res.status(409).json({message:"email exist"})
+        return next(new AppError('email exist',409));
+
     }
         
     const passwordHashed= await bcrypt.hash(password,parseInt(process.env.SALTROUND))
@@ -27,24 +30,29 @@ export const Register = async (req,res)=>{
        await userModel.create({userName,email,password:passwordHashed,cpassword,gender,age});
    
         return res.status(201).json({message:"success"})
-        }catch(err){
-            return res.status(500).json({messsag:"catch error",error:err.stack})
-        }
+        
     }
 
 
 
-    export const Login = async(req,res)=>{
+    export const Login = async(req,res,next)=>{
+        
+
+        
         const {email,password}=req.body;
         
        
         const user= await userModel.findOne({email});
         if(!user){
-            return res.status(404).json({message:"email not found"})
+           // return res.status(404).json({message:"email not found"})
+           return next(new AppError('email not found',404));
         }
         const match =  bcrypt.compareSync(password,user.password);
         if(!match){
-            return res.status(404).json({message:"invalid password"})
+           // return res.status(404).json({message:"invalid password"})
+           return next(new AppError('invalid password',409));
+
+
      
         }
         const token= jwt.sign(
@@ -52,14 +60,13 @@ export const Register = async (req,res)=>{
             {expiresIn:'1h'}
         );
         return res.status(200).json({message:"success",token})
-    }
+    
+}
 
     export const allUsers= async(req,res)=>{
-        try{
+        
             const users = await userModel.find().select('userName');
             return res.status(200).json({message:"success",users});
-        }catch(error){
-            return res.status(500).json({message:"catch error",error:error.stack});
-        }
     }
+    
     
