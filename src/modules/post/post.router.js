@@ -8,6 +8,6 @@ import fileUpload from "../../Utils/multer.js";
 
 
 router.post('/',auth,fileUpload().single('image'),asyncHandler(postController.createPost));
-
-
+router.patch('/like/:id',auth,asyncHandler(postController.likePost));
+router.patch('/unlike/:id',auth,asyncHandler(postController.unlikePost));
 export default router;
