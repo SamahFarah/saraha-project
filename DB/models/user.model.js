@@ -24,6 +24,9 @@ default:false,
 gender:{  //male or : female .fe male . Female . fe_male... there is alot of ways to write it so : put enum
 type:String,
 enum :['Male','Female']
+},
+profilePic:{
+    type:String,
 }
 },{
     timestamps:true

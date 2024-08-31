@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from "../../Utils/sendEmail.js";
 import { AppError } from "../../../AppError.js";
+import cloudinary from "../../Utils/cloudinary.js";
 
 
 export const Register = async (req,res,next)=>{
@@ -69,4 +70,10 @@ export const Register = async (req,res,next)=>{
             return res.status(200).json({message:"success",users});
     }
     
-    
+    export const uploadImage= async(req,res)=>{
+        const {secure_url}= await cloudinary.uploader.upload(req.file.path);
+
+const user= await userModel.findByIdAndUpdate(req.id,{profilePic:secure_url})
+
+        return res.status(200).json({message:"success"});
+    }
