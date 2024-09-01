@@ -6,7 +6,7 @@ import { asyncHandler } from "../../Utils/catchError.js";
 import fileUpload from "../../Utils/multer.js";
 
 
-
+router.get('/',asyncHandler(postController.getPosts))
 router.post('/',auth,fileUpload().single('image'),asyncHandler(postController.createPost));
 router.patch('/like/:id',auth,asyncHandler(postController.likePost));
 router.patch('/unlike/:id',auth,asyncHandler(postController.unlikePost));

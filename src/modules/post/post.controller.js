@@ -3,6 +3,29 @@ import cloudinary from "../../Utils/cloudinary.js";
 import { AppError } from "../../../AppError.js";
 import commentModel from "../../../DB/models/comment.model.js";
 
+
+export const getPosts = async(req,res,next)=>{
+    const posts = await postModel.find({}).populate([
+        {
+        path:'userId',
+        select:'userName profilePic'
+    },
+    {
+        path: 'like',
+        select: 'userName profilePic'
+    },
+    {
+        path: 'comment',
+        select: 'text' 
+    },
+    ]);
+
+    return res.status(200).json({message:"success",posts})
+}
+
+
+
+
 export const createPost= async(req,res)=>{
     const userId=req.id;
      const {title,body}=req.body;
